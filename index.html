@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bertin's Games - Seu Portal de Jogos Retro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F3AE;</text></svg>">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="logo-icon">&#x1F3AE;</span>
+      <span class="brand-retro">Bertin's</span><span class="brand-hub">Games</span>
+    </div>
+    <div class="search-wrapper">
+      <span class="search-icon">&#x1F50D;</span>
+      <input type="text" id="searchInput" placeholder="Buscar jogos... (pressione / para focar)" autocomplete="off">
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn" id="favToggle">
+        <span class="btn-icon">&#x2665;</span>
+        <span class="btn-text">Favoritos</span>
+      </button>
+      <div class="stats-badge">
+        <span class="count">0</span> jogos
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+    <section class="hero">
+      <div class="pixel-float">&#x1F579;</div>
+      <div class="pixel-float">&#x1F47E;</div>
+      <div class="pixel-float">&#x2B50;</div>
+      <div class="hero-content">
+        <h1>Bem-vindo ao <span>Bertin's Games</span></h1>
+        <p>Todos os seus emuladores online em um unico lugar. Escolha o console, encontre o jogo e jogue direto aqui dentro.</p>
+        <div class="hero-stats">
+          <div class="hero-stat"><span class="num" id="heroGames">0</span><span class="label">Jogos</span></div>
+          <div class="hero-stat"><span class="num" id="heroConsoles">0</span><span class="label">Consoles</span></div>
+          <div class="hero-stat"><span class="num" id="heroFavs">0</span><span class="label">Favoritos</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="console-tabs-section">
+      <div class="section-label">Consoles</div>
+      <div class="console-tabs" id="consoleTabs"></div>
+    </section>
+
+    <div class="filter-bar">
+      <select id="genreFilter"></select>
+      <select id="sortFilter">
+        <option value="title">A-Z</option>
+        <option value="year">Mais antigo</option>
+        <option value="year-desc">Mais recente</option>
+        <option value="rating">Melhor avaliado</option>
+        <option value="console">Por console</option>
+      </select>
+      <span class="results-count" id="resultsCount"></span>
+    </div>
+
+    <div class="games-grid" id="gamesGrid"></div>
+
+    <footer class="footer">
+      Bertin's Games &mdash; Agregador de emuladores online &bull; Apenas para uso pessoal
+    </footer>
+  </main>
+
+  <!-- GAME MODAL -->
+  <div class="modal-overlay" id="gameModal">
+    <div class="modal"></div>
+  </div>
+
+  <!-- PLAYER (iframe integrado no hub) -->
+  <div class="player-overlay" id="playerOverlay">
+    <div class="player-header">
+      <span class="player-title" id="playerTitle">Carregando...</span>
+      <div class="player-controls">
+        <button class="player-ctrl-btn" id="playerFullscreen" title="Tela cheia">&#x26F6;</button>
+        <button class="player-ctrl-btn" id="playerNewTab" title="Abrir em nova aba">&#x2197;</button>
+        <button class="player-ctrl-btn player-close-btn" id="playerClose" title="Fechar (ESC)">&#x2715;</button>
+      </div>
+    </div>
+    <iframe id="playerFrame" class="player-frame" src="about:blank" allowfullscreen allow="gamepad; autoplay; fullscreen"></iframe>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/games.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
