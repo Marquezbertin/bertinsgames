@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bertin's Games - Seu Portal de Jogos Retro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F3AE;</text></svg>">
 </head>
@@ -17,9 +20,14 @@
     </div>
     <div class="search-wrapper">
       <span class="search-icon">&#x1F50D;</span>
-      <input type="text" id="searchInput" placeholder="Buscar jogos... (pressione / para focar)" autocomplete="off">
+      <input type="text" id="searchInput" placeholder="Buscar entre 2000+ jogos... (pressione /)" autocomplete="off">
+      <button class="search-clear" id="searchClear" title="Limpar busca">&#x2715;</button>
     </div>
     <div class="nav-right">
+      <button class="nav-btn" id="randomBtn" title="Jogo aleatorio">
+        <span class="btn-icon">&#x1F3B2;</span>
+        <span class="btn-text">Surpresa</span>
+      </button>
       <button class="nav-btn" id="favToggle">
         <span class="btn-icon">&#x2665;</span>
         <span class="btn-text">Favoritos</span>
@@ -33,26 +41,55 @@
   <!-- MAIN -->
   <main class="main">
     <section class="hero">
+      <div class="hero-bg-effects">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="hero-grid-overlay"></div>
+      </div>
       <div class="pixel-float">&#x1F579;</div>
       <div class="pixel-float">&#x1F47E;</div>
       <div class="pixel-float">&#x2B50;</div>
+      <div class="pixel-float">&#x1F680;</div>
+      <div class="pixel-float">&#x1F525;</div>
       <div class="hero-content">
         <h1>Bem-vindo ao <span>Bertin's Games</span></h1>
-        <p>Todos os seus emuladores online em um unico lugar. Escolha o console, encontre o jogo e jogue direto aqui dentro.</p>
+        <p>O maior hub de jogos retro online. Escolha o console, encontre o jogo e jogue direto no navegador.</p>
         <div class="hero-stats">
-          <div class="hero-stat"><span class="num" id="heroGames">0</span><span class="label">Jogos</span></div>
-          <div class="hero-stat"><span class="num" id="heroConsoles">0</span><span class="label">Consoles</span></div>
-          <div class="hero-stat"><span class="num" id="heroFavs">0</span><span class="label">Favoritos</span></div>
+          <div class="hero-stat">
+            <span class="num" id="heroGames">0</span>
+            <span class="label">Jogos</span>
+          </div>
+          <div class="hero-stat">
+            <span class="num" id="heroConsoles">0</span>
+            <span class="label">Consoles</span>
+          </div>
+          <div class="hero-stat">
+            <span class="num" id="heroFavs">0</span>
+            <span class="label">Favoritos</span>
+          </div>
+          <div class="hero-stat">
+            <span class="num" id="heroGenres">0</span>
+            <span class="label">Generos</span>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- RECENTLY PLAYED -->
+    <section class="recent-section" id="recentSection" style="display:none">
+      <div class="section-header">
+        <div class="section-label">&#x1F552; Jogados Recentemente</div>
+      </div>
+      <div class="recent-scroll" id="recentScroll"></div>
+    </section>
+
     <section class="console-tabs-section">
-      <div class="section-label">Consoles</div>
+      <div class="section-label">&#x1F3AE; Consoles</div>
       <div class="console-tabs" id="consoleTabs"></div>
     </section>
 
-    <div class="filter-bar">
+    <div class="filter-bar" id="filterBar">
       <select id="genreFilter"></select>
       <select id="sortFilter">
         <option value="title">A-Z</option>
@@ -66,17 +103,27 @@
 
     <div class="games-grid" id="gamesGrid"></div>
 
+    <div class="load-more-wrapper" id="loadMoreWrapper" style="display:none">
+      <button class="load-more-btn" id="loadMoreBtn">
+        Carregar mais jogos <span class="load-more-count" id="loadMoreCount"></span>
+      </button>
+    </div>
+
     <footer class="footer">
-      Bertin's Games &mdash; Agregador de emuladores online &bull; Apenas para uso pessoal
+      <div class="footer-brand">&#x1F3AE; Bertin's Games</div>
+      <div class="footer-text">Agregador de emuladores online &bull; Apenas para uso pessoal</div>
     </footer>
   </main>
+
+  <!-- BACK TO TOP -->
+  <button class="back-to-top" id="backToTop" title="Voltar ao topo">&#x2191;</button>
 
   <!-- GAME MODAL -->
   <div class="modal-overlay" id="gameModal">
     <div class="modal"></div>
   </div>
 
-  <!-- PLAYER (iframe integrado no hub) -->
+  <!-- PLAYER -->
   <div class="player-overlay" id="playerOverlay">
     <div class="player-header">
       <span class="player-title" id="playerTitle">Carregando...</span>
@@ -84,6 +131,20 @@
         <button class="player-ctrl-btn" id="playerFullscreen" title="Tela cheia">&#x26F6;</button>
         <button class="player-ctrl-btn" id="playerNewTab" title="Abrir em nova aba">&#x2197;</button>
         <button class="player-ctrl-btn player-close-btn" id="playerClose" title="Fechar (ESC)">&#x2715;</button>
+      </div>
+    </div>
+    <div class="player-loading" id="playerLoading">
+      <div class="player-spinner"></div>
+      <div class="player-loading-text">Carregando jogo...</div>
+    </div>
+    <div class="player-error" id="playerError" style="display:none">
+      <div class="player-error-icon">&#x1F6AB;</div>
+      <div class="player-error-title">Jogo nao disponivel nesta fonte</div>
+      <div class="player-error-text">Este jogo pode nao estar disponivel no emulador selecionado.</div>
+      <div class="player-error-actions">
+        <button class="player-error-btn" id="playerOpenExternal">&#x2197; Abrir em nova aba</button>
+        <button class="player-error-btn secondary" id="playerTrySearch">&#x1F50D; Buscar no site</button>
+        <button class="player-error-btn secondary" id="playerErrorClose">Voltar</button>
       </div>
     </div>
     <iframe id="playerFrame" class="player-frame" src="about:blank" allowfullscreen allow="gamepad; autoplay; fullscreen"></iframe>
